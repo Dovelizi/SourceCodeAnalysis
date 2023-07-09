@@ -19,7 +19,7 @@ package org.springframework.expression;
 /**
  * Parses expression strings into compiled expressions that can be evaluated.
  * Supports parsing templates as well as standard expression strings.
- *
+ * 使用解释器模式的设计
  * @author Keith Donald
  * @author Andy Clement
  * @since 3.0

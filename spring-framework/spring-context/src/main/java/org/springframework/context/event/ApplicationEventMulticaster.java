@@ -24,12 +24,18 @@ import org.springframework.core.ResolvableType;
 import org.springframework.lang.Nullable;
 
 /**
+ * 实现该接口的对象能够管理多个ApplicationListener对象，并向它们发布事件
+ *
  * Interface to be implemented by objects that can manage a number of
  * {@link ApplicationListener} objects and publish events to them.
  *
  * <p>An {@link org.springframework.context.ApplicationEventPublisher}, typically
  * a Spring {@link org.springframework.context.ApplicationContext}, can use an
  * {@code ApplicationEventMulticaster} as a delegate for actually publishing events.
+ *
+ * 一个ApplicationEventPublisher，通常是一个spring ApplicationContext，能有使用ApplicationEventMulticaster作为实际发布事件的代理
+ * 该接口是观察者模式中的抽象主题（Subject)角色：
+ * 也叫抽象目标类，提供了用户保存观察者对象的聚集类和增加、删除观察者对象的方法，以及通知所有观察者的抽象方法
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -40,6 +46,7 @@ public interface ApplicationEventMulticaster {
 
 	/**
 	 * Add a listener to be notified of all events.
+	 * 添加一个监听器用来通知所有事件
 	 * @param listener the listener to add
 	 * @see #removeApplicationListener(ApplicationListener)
 	 * @see #removeApplicationListeners(Predicate)
@@ -48,6 +55,7 @@ public interface ApplicationEventMulticaster {
 
 	/**
 	 * Add a listener bean to be notified of all events.
+	 * 添加一个监听器bean，用来通知所有事件
 	 * @param listenerBeanName the name of the listener bean to add
 	 * @see #removeApplicationListenerBean(String)
 	 * @see #removeApplicationListenerBeans(Predicate)
@@ -56,6 +64,7 @@ public interface ApplicationEventMulticaster {
 
 	/**
 	 * Remove a listener from the notification list.
+	 * 从通知列表中移除一个监听器
 	 * @param listener the listener to remove
 	 * @see #addApplicationListener(ApplicationListener)
 	 * @see #removeApplicationListeners(Predicate)
@@ -64,6 +73,7 @@ public interface ApplicationEventMulticaster {
 
 	/**
 	 * Remove a listener bean from the notification list.
+	 * 从通知列表中移除一个监听器bean名称
 	 * @param listenerBeanName the name of the listener bean to remove
 	 * @see #addApplicationListenerBean(String)
 	 * @see #removeApplicationListenerBeans(Predicate)
@@ -72,6 +82,7 @@ public interface ApplicationEventMulticaster {
 
 	/**
 	 * Remove all matching listeners from the set of registered
+	 * 移除这个多播器中所有的监听器，移除之后，多播器将会在新的监听器被注册之前，被通知时都不会执行任何动作
 	 * {@code ApplicationListener} instances (which includes adapter classes
 	 * such as {@link ApplicationListenerMethodAdapter}, e.g. for annotated
 	 * {@link EventListener} methods).
@@ -108,6 +119,7 @@ public interface ApplicationEventMulticaster {
 
 	/**
 	 * Multicast the given application event to appropriate listeners.
+	 * 广播给定的事给到合适的监听器，如果可能的话，使用下面的方法，因为它提供了更好的支持
 	 * <p>Consider using {@link #multicastEvent(ApplicationEvent, ResolvableType)}
 	 * if possible as it provides better support for generics-based events.
 	 * @param event the event to multicast

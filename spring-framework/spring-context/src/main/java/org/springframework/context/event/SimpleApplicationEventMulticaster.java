@@ -133,6 +133,7 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 
 	@Override
 	public void multicastEvent(final ApplicationEvent event, @Nullable ResolvableType eventType) {
+		// 第一步：调用 resolveDefaultEventType 方法解析事件的类型，会返回类的全限定名
 		ResolvableType type = (eventType != null ? eventType : resolveDefaultEventType(event));
 		Executor executor = getTaskExecutor();
 		for (ApplicationListener<?> listener : getApplicationListeners(event, type)) {
@@ -140,6 +141,7 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 				executor.execute(() -> invokeListener(listener, event));
 			}
 			else {
+				// 将事件 event 通知给监听器 listener
 				invokeListener(listener, event);
 			}
 		}

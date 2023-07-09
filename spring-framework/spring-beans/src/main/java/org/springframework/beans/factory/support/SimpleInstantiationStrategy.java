@@ -28,7 +28,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
-/**
+ /**
  * Simple object instantiation strategy for use in a BeanFactory.
  *
  * <p>Does not support Method Injection, although it provides hooks for subclasses
@@ -124,9 +124,12 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 		try {
 			ReflectionUtils.makeAccessible(factoryMethod);
 
+			// 从 ThreadLocal 中获取原来的 Method 对象
 			Method priorInvokedFactoryMethod = currentlyInvokedFactoryMethod.get();
 			try {
+				// 设置当前方法到 ThreadLocal 中
 				currentlyInvokedFactoryMethod.set(factoryMethod);
+				// 通过反射调用 factory-bean 的 factory-method 方法获取结果 bean
 				Object result = factoryMethod.invoke(factoryBean, args);
 				if (result == null) {
 					result = new NullBean();

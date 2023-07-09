@@ -442,6 +442,7 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 
 		/**
 		 * Callback to execute the query.
+		 * 匿名内部类
 		 */
 		class QueryStatementCallback implements StatementCallback<T>, SqlProvider {
 			@Override
@@ -461,7 +462,7 @@ public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
 				return sql;
 			}
 		}
-
+		// 把匿名内部类当作 execute 的参数传递过去（相当于 Command 模式中的具体地方命令的执行）
 		return execute(new QueryStatementCallback(), true);
 	}
 

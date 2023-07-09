@@ -39,7 +39,7 @@ import javax.annotation.Nullable;
  *   }
  * }
  * </pre>
- *
+ * <p>MethodInterceptor是AOP中切入点的处理器，对于interceptor类型的对象，处理器中最终被调用的是invoke方法</p>
  * @author Rod Johnson
  */
 @FunctionalInterface

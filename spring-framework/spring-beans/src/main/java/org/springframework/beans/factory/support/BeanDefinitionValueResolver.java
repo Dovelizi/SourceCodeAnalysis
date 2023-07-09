@@ -110,7 +110,8 @@ class BeanDefinitionValueResolver {
 		// We must check each value to see whether it requires a runtime reference
 		// to another bean to be resolved.
 		if (value instanceof RuntimeBeanReference ref) {
-			return resolveReference(argName, ref);		// 如果在创建实例化某个 Bean 时，存在对其他的 Bean 引用，这个就是处理该引用的入口
+			// 如果在创建实例化某个 Bean 时，存在对其他的 Bean 引用，这个就是处理该引用的入口
+			return resolveReference(argName, ref);
 		}
 		else if (value instanceof RuntimeBeanNameReference ref) {
 			String refName = ref.getBeanName();

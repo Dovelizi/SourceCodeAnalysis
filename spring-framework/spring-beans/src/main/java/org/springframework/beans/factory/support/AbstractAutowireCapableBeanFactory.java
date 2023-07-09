@@ -407,6 +407,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		BeanDefinition bd = getMergedBeanDefinition(beanName);
 		BeanWrapper bw = new BeanWrapperImpl(existingBean);
 		initBeanWrapper(bw);
+		// 填充 Bean 的属性
 		applyPropertyValues(beanName, bd, bw, bd.getPropertyValues());
 	}
 
@@ -1405,6 +1406,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		if (pvs != null) {
+			// 属性赋值
 			applyPropertyValues(beanName, mbd, bw, pvs);
 		}
 	}
@@ -1741,7 +1743,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		try {
-			invokeInitMethods(beanName, wrappedBean, mbd); // ⭐️Bean 的实例化
+			// 在 Bean 的实例化之前去还要去实现该 Bean 所实现的一些自定的初始化方法，比如 @PostConstruct 注解的方法
+			invokeInitMethods(beanName, wrappedBean, mbd);
 		}
 		catch (Throwable ex) {
 			throw new BeanCreationException(

@@ -406,39 +406,49 @@ public class BeanDefinitionParserDelegate {
 	}
 
 	/**
+	 * Bean 标签的解析
+	 *
 	 * Parses the supplied {@code <bean>} element. May return {@code null}
 	 * if there were errors during parse. Errors are reported to the
 	 * {@link org.springframework.beans.factory.parsing.ProblemReporter}.
 	 */
 	@Nullable
 	public BeanDefinitionHolder parseBeanDefinitionElement(Element ele, @Nullable BeanDefinition containingBean) {
+		// 获取 ID 属性
 		String id = ele.getAttribute(ID_ATTRIBUTE);
+		// 获取 NAME 属性
 		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);
 
 		List<String> aliases = new ArrayList<>();
 		if (StringUtils.hasLength(nameAttr)) {
+			// 名称按照 , ; 进行分割
 			String[] nameArr = StringUtils.tokenizeToStringArray(nameAttr, MULTI_VALUE_ATTRIBUTE_DELIMITERS);
 			aliases.addAll(Arrays.asList(nameArr));
 		}
 
 		String beanName = id;
 		if (!StringUtils.hasText(beanName) && !aliases.isEmpty()) {
+			// 如果没有指定 id，将 name 的第一个值作为 id
 			beanName = aliases.remove(0);
 			if (logger.isTraceEnabled()) {
 				logger.trace("No XML 'id' specified - using '" + beanName +
 						"' as bean name and " + aliases + " as aliases");
 			}
 		}
-
+		// 默认 null
 		if (containingBean == null) {
+			// 检查名字是否唯一，如果 id 重复了，将抛出错误
+			// 内部 usedNames 是一个 HashSet，将会存储加载过的 name 和 aliases
 			checkNameUniqueness(beanName, aliases, ele);
 		}
 
+		// 将公共属性放入 AbstractBeanDefinition，具体实现在子类 GenericBeanDefinition
 		AbstractBeanDefinition beanDefinition = parseBeanDefinitionElement(ele, beanName, containingBean);
 		if (beanDefinition != null) {
 			if (!StringUtils.hasText(beanName)) {
 				try {
 					if (containingBean != null) {
+						// 如果 id 和 name 都是空，那个 spring 会给它生成一个默认的名称
 						beanName = BeanDefinitionReaderUtils.generateBeanName(
 								beanDefinition, this.readerContext.getRegistry(), true);
 					}
@@ -696,6 +706,7 @@ public class BeanDefinitionParserDelegate {
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node node = nl.item(i);
 			if (isCandidateElement(node) && nodeNameEquals(node, CONSTRUCTOR_ARG_ELEMENT)) {
+				// 循环解析 constructor-arg 属性
 				parseConstructorArgElement((Element) node, bd);
 			}
 		}
@@ -1409,11 +1420,13 @@ public class BeanDefinitionParserDelegate {
 	 */
 	public BeanDefinitionHolder decorateBeanDefinitionIfRequired(
 			Element ele, BeanDefinitionHolder originalDef, @Nullable BeanDefinition containingBd) {
-
+		// 方法中的第三个参数是父类 bean
+		// 当对某个嵌套配置进行分析时，这里需要传递，是为了使用父类的 scope 属性，以备子类没设定 scope，可以使用父类的 scope 属性
 		BeanDefinitionHolder finalDefinition = originalDef;
 
 		// Decorate based on custom attributes first.
 		NamedNodeMap attributes = ele.getAttributes();
+		// 遍历所有的属性，进行属性的修饰
 		for (int i = 0; i < attributes.getLength(); i++) {
 			Node node = attributes.item(i);
 			finalDefinition = decorateIfRequired(node, finalDefinition, containingBd);
@@ -1421,6 +1434,7 @@ public class BeanDefinitionParserDelegate {
 
 		// Decorate based on custom nested elements.
 		NodeList children = ele.getChildNodes();
+		// 遍历所有的子节点，修饰子元素
 		for (int i = 0; i < children.getLength(); i++) {
 			Node node = children.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {

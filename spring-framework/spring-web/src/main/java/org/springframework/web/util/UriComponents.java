@@ -47,7 +47,9 @@ import org.springframework.util.MultiValueMap;
 @SuppressWarnings("serial")
 public abstract class UriComponents implements Serializable {
 
-	/** Captures URI template variable names. */
+	/** Captures URI template variable names.
+	 *  用于分割uri的正则表达式
+	 * */
 	private static final Pattern NAMES_PATTERN = Pattern.compile("\\{([^/]+?)\\}");
 
 

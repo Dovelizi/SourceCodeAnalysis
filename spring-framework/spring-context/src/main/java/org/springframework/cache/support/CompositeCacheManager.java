@@ -30,6 +30,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.lang.Nullable;
 
 /**
+ * 将多个缓存管理其组合
  * Composite {@link CacheManager} implementation that iterates over
  * a given collection of delegate {@link CacheManager} instances.
  *

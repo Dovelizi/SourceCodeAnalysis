@@ -172,11 +172,14 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	protected void parseBeanDefinitions(Element root, BeanDefinitionParserDelegate delegate) {
 		// 从根节点开始 <beans> 开始遍历
 		if (delegate.isDefaultNamespace(root)) {
+			// 遍历 doc 中节点的列表
 			NodeList nl = root.getChildNodes();
 			for (int i = 0; i < nl.getLength(); i++) {
 				Node node = nl.item(i);
 				if (node instanceof Element ele) {
 					if (delegate.isDefaultNamespace(ele)) {
+						// 识别出默认标签的 bean 注册
+						// 根据元素名称，调用不同的加载方法，注册 bean
 						parseDefaultElement(ele, delegate);
 					}
 					else {
@@ -307,11 +310,13 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * and registering it with the registry.
 	 */
 	protected void processBeanDefinition(Element ele, BeanDefinitionParserDelegate delegate) {
+		// 获取 Bean 的 BeanDefinition 以及 BeanName 和 Bean 的别名
 		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele);
 		if (bdHolder != null) {
 			bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
 			try {
 				// Register the final decorated instance.
+				// 注册最后一个装饰实例
 				BeanDefinitionReaderUtils.registerBeanDefinition(bdHolder, getReaderContext().getRegistry());
 			}
 			catch (BeanDefinitionStoreException ex) {
@@ -319,6 +324,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 						bdHolder.getBeanName() + "'", ele, ex);
 			}
 			// Send registration event.
+			// 通知监视器 表示这个 Bean 以及加载完成
 			getReaderContext().fireComponentRegistered(new BeanComponentDefinition(bdHolder));
 		}
 	}

@@ -323,6 +323,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 				// Create bean instance.
 				if (mbd.isSingleton()) {
+					// 从一级缓存中根据 beanName 获取对应的 Bean
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
 							return createBean(beanName, mbd, args);
@@ -337,12 +338,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					});
 					beanInstance = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);
 				}
-
+				// 是否是原型模式
 				else if (mbd.isPrototype()) {
 					// It's a prototype -> create a new instance.
 					Object prototypeInstance = null;
 					try {
 						beforePrototypeCreation(beanName);
+						// 创建原型的 Bean
 						prototypeInstance = createBean(beanName, mbd, args);
 					}
 					finally {

@@ -557,7 +557,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
-			// 配置标准的 beanFactory，设置ClassLoader，设置SpEL表达式解析器等
+			// 配置标准的 beanFactory，设置 ClassLoader，设置 SpEL 表达式解析器等
 			prepareBeanFactory(beanFactory);
 
 			try {
@@ -742,9 +742,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 		// Detect a LoadTimeWeaver and prepare for weaving, if found.
 		/*
-		如果当前 BeanFactory 包含 loadTimeWeaver Bean，说明存在类加载期织入 AspectJ
-		则把当前 BeanFactory 交给类加载期 BeanPostProcessor 实现类 LoadTimeWeaverAwareProcessor 来处理
-		从而实现类加载期织入AspectJ的目的
+			如果当前 BeanFactory 包含 loadTimeWeaver Bean，说明存在类加载期织入 AspectJ
+			则把当前 BeanFactory 交给类加载期 BeanPostProcessor 实现类 LoadTimeWeaverAwareProcessor 来处理
+			从而实现类加载期织入 AspectJ 的目的
 		 */
 		if (!NativeDetector.inNativeImage() && beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) {
 			beanFactory.addBeanPostProcessor(new LoadTimeWeaverAwareProcessor(beanFactory));
